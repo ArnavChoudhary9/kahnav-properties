@@ -1,19 +1,19 @@
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between px-4 py-6 md:px-12 lg:px-36">
-      <div className="relative z-10 flex items-center justify-center w-full h-80 lg:h-96">
-        <div className="absolute inset-0 z-[-10] rounded-full bg-gradient-radial from-white to-transparent blur-2xl"></div>
+    <main className="flex min-h-screen flex-col items-center justify-between px-4 py-6 md:px-12 lg:px-24">
+      <div className="relative z-10 flex items-center justify-center w-full h-32 lg:h-96">
+        <div className="absolute inset-0 z-[-10] rounded-full bg-gradient-radial from-blue-900 to-transparent blur-3xl"></div>
         <h1 className="text-4xl font-bold text-center sm:text-5xl md:text-6xl">
           Kahnav Properties
         </h1>
       </div>
 
-      <div className="grid gap-8 w-full max-w-5xl grid-cols-1 sm:grid-cols-2">
+      <div className="grid gap-6 w-full max-w-5xl grid-cols-1 sm:grid-cols-2">
         <a
           href="/buy"
           className="group m-4 rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 block"
         >
-          <h2 className="mb-3 text-2xl font-semibold">
+          <h2 className="mb-2 text-2xl font-semibold">
             Buy{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
@@ -28,7 +28,7 @@ export default function Home() {
           href="/list"
           className="group m-4 rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 block"
         >
-          <h2 className="mb-3 text-2xl font-semibold">
+          <h2 className="mb-2 text-2xl font-semibold">
             List{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
