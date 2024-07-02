@@ -2,13 +2,16 @@
 we need to make this component client rendered as well*/
 'use client'
 
+import { useState } from "react";
+
 // Map component Component from library
-import { GoogleMap } from "@react-google-maps/api";
+import { GoogleMap, MarkerF } from "@react-google-maps/api";
+import { setDefaults, fromLatLng, OutputFormat } from "react-geocode";
 
 // Map's styling
 const defaultMapContainerStyle = {
     width: '100%',
-    height: '90vh',
+    height: '60vh',
     borderRadius: '15px 15px 0px 15px',
 };
 
@@ -41,17 +44,65 @@ const defaultMapOptions = {
     }
 };
 
+const UpdateAddress = (lat: number, lng: number) : void => {
+    fromLatLng(lat, lng)
+        .then(({ results }) => {
+            const addressElement = document.getElementById("address");
+            if (addressElement) {
+                addressElement.innerHTML = `
+                    <h1 class="text-3xl">Address:</h1> <br>
+                    <h3>${results[0].formatted_address}</h3>
+                `;
+            } else {
+                console.error("Address element not found");
+            }
+        })
+        .catch(console.error);
+};
+
+setDefaults({
+    key: process.env.NEXT_PUBLIC_GOOGLE_MAP_API as string,
+    language: "en",
+    region: "in",
+    outputFormat: OutputFormat.JSON,
+});
+
 const MapComponent = () => {
+    const [[lat, lng], setLatLng] = useState([defaultMapCenter.lat, defaultMapCenter.lng]);
+
     return (
-        <div className="w-full">
+        <div className="w-50">
             <GoogleMap
                 mapContainerStyle={defaultMapContainerStyle}
                 center={defaultMapCenter}
                 zoom={defaultMapZoom}
                 options={defaultMapOptions}
-            />
+                onClick={(event: google.maps.MapMouseEvent) => {
+                    if (event.latLng) {
+                        setLatLng([event.latLng.lat(), event.latLng.lng()]);
+                        UpdateAddress(lat, lng);
+                    } else {
+                        console.error("Event latLng is null");
+                    }
+                }}
+            >
+                <MarkerF
+                    position={{
+                        lat: lat,
+                        lng: lng
+                    }}
+                    draggable={true}
+                    onDragEnd={(event: google.maps.MapMouseEvent) => {
+                        if (event.latLng) {
+                            UpdateAddress(event.latLng.lat(), event.latLng.lng());
+                        } else {
+                            console.error("Event latLng is null");
+                        }
+                    }}
+                />
+            </GoogleMap>
         </div>
     )
 };
 
-export { MapComponent };
+export default MapComponent;
