@@ -47,14 +47,9 @@ const defaultMapOptions = {
 const UpdateAddress = (lat: number, lng: number) : void => {
     fromLatLng(lat, lng)
         .then(({ results }) => {
-            const addressElement = document.getElementById("address");
-            if (addressElement) {
-                addressElement.innerHTML = `
-                    <h1 class="text-3xl">Address:</h1> <br>
-                    <h3>${results[0].formatted_address}</h3>
-                `;
-            } else {
-                console.error("Address element not found");
+            const ADDRESS_ELEMENT = document.getElementById('address');
+            if (ADDRESS_ELEMENT) {
+                ADDRESS_ELEMENT.innerText = results[0].formatted_address;
             }
         })
         .catch(console.error);
@@ -94,13 +89,19 @@ const MapComponent = () => {
                     draggable={true}
                     onDragEnd={(event: google.maps.MapMouseEvent) => {
                         if (event.latLng) {
-                            UpdateAddress(event.latLng.lat(), event.latLng.lng());
+                            setLatLng([event.latLng.lat(), event.latLng.lng()]);
+                            UpdateAddress(lat, lng);
                         } else {
                             console.error("Event latLng is null");
                         }
                     }}
                 />
             </GoogleMap>
+            
+            <div className="flex flex-col p-6">
+                <h1 className="text-2xl font-bold">Address:</h1>
+                <p className="text-base" id="address" />
+            </div>
         </div>
     )
 };

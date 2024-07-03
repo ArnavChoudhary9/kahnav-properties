@@ -5,8 +5,6 @@ const List = () => {
   return (
     <MapProvider>
       <MapComponent />
-
-      <div className="md:flex p-6" id="address"></div>
     </MapProvider>
   )
 }
