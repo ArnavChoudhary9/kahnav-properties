@@ -74,8 +74,9 @@ const MapComponent = () => {
                 options={defaultMapOptions}
                 onClick={(event: google.maps.MapMouseEvent) => {
                     if (event.latLng) {
-                        setLatLng([event.latLng.lat(), event.latLng.lng()]);
-                        UpdateAddress(lat, lng);
+                        const [newLat, newLng] = [event.latLng.lat(), event.latLng.lng()];
+                        setLatLng([newLat, newLng]);
+                        UpdateAddress(newLat, newLng);
                     } else {
                         console.error("Event latLng is null");
                     }
@@ -89,8 +90,9 @@ const MapComponent = () => {
                     draggable={true}
                     onDragEnd={(event: google.maps.MapMouseEvent) => {
                         if (event.latLng) {
-                            setLatLng([event.latLng.lat(), event.latLng.lng()]);
-                            UpdateAddress(lat, lng);
+                            const [newLat, newLng] = [event.latLng.lat(), event.latLng.lng()];
+                            setLatLng([newLat, newLng]);
+                            UpdateAddress(newLat, newLng);
                         } else {
                             console.error("Event latLng is null");
                         }
