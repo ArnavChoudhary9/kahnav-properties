@@ -1,12 +1,12 @@
 'use client'
 
-import { useSearchParams } from "next/navigation";
+const Markarea = ({ searchParams } : {
+    searchParams: { lat: number, lng: number }
+}) => {
+    const lat = searchParams.lat;
+    const lng = searchParams.lng;
 
-const Markarea = () => {
-    const searchParams = useSearchParams();
-
-    const lat = searchParams.get('lat');
-    const lng = searchParams.get('lng');
+    console.log(lat, lng);
 
     return (
         <div>
