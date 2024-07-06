@@ -3,6 +3,7 @@ we need to make this component client rendered as well*/
 'use client'
 
 import { useState } from "react";
+import Link from "next/link";
 
 // Map component Component from library
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
@@ -22,7 +23,7 @@ const defaultMapCenter = {
 }
 
 // Default zoom level, can be adjusted
-const defaultMapZoom = 19
+const defaultMapZoom = 18
 
 // Sikar Bounds
 const sikarBounds = {
@@ -44,17 +45,6 @@ const defaultMapOptions = {
     }
 };
 
-const UpdateAddress = (lat: number, lng: number) : void => {
-    fromLatLng(lat, lng)
-        .then(({ results }) => {
-            const ADDRESS_ELEMENT = document.getElementById('address');
-            if (ADDRESS_ELEMENT) {
-                ADDRESS_ELEMENT.innerText = results[0].formatted_address;
-            }
-        })
-        .catch(console.error);
-};
-
 setDefaults({
     key: process.env.NEXT_PUBLIC_GOOGLE_MAP_API as string,
     language: "en",
@@ -62,11 +52,29 @@ setDefaults({
     outputFormat: OutputFormat.JSON,
 });
 
+const UpdateAddress = (lat: number, lng: number) : void => {
+    fromLatLng(lat, lng)
+        .then(({ results }) => {
+            const ADDRESS_ELEMENT = document.getElementById('address');
+
+            if (ADDRESS_ELEMENT) {
+                ADDRESS_ELEMENT.innerText = results[0].formatted_address;
+            }
+        })
+        .catch(console.error);
+};
+
+let AddressSet : boolean = false;
+
 const MapComponent = () => {
     const [[lat, lng], setLatLng] = useState([defaultMapCenter.lat, defaultMapCenter.lng]);
 
     return (
         <div className="w-50">
+            {!AddressSet && (
+                <h1 className="px-6 py-2 text-2xl">Locate your land</h1>
+            )}
+
             <GoogleMap
                 mapContainerStyle={defaultMapContainerStyle}
                 center={defaultMapCenter}
@@ -77,6 +85,8 @@ const MapComponent = () => {
                         const [newLat, newLng] = [event.latLng.lat(), event.latLng.lng()];
                         setLatLng([newLat, newLng]);
                         UpdateAddress(newLat, newLng);
+
+                        AddressSet = true;
                     } else {
                         console.error("Event latLng is null");
                     }
@@ -93,6 +103,8 @@ const MapComponent = () => {
                             const [newLat, newLng] = [event.latLng.lat(), event.latLng.lng()];
                             setLatLng([newLat, newLng]);
                             UpdateAddress(newLat, newLng);
+
+                            AddressSet = true;
                         } else {
                             console.error("Event latLng is null");
                         }
@@ -100,10 +112,21 @@ const MapComponent = () => {
                 />
             </GoogleMap>
             
-            <div className="flex flex-col p-6">
-                <h1 className="text-2xl font-bold">Address:</h1>
-                <p className="text-base" id="address" />
-            </div>
+            {AddressSet && (
+                <div className="flex flex-col p-6">
+                    <h1 className="text-2xl font-bold">Address:</h1>
+                    <p className="text-base" id="address" />
+
+                    <Link 
+                        href={`/list/markarea?lat=${lat}&lng=${lng}`}
+                        className="bg-blue-900 text-white text-center font-semibold mt-10 py-2 px-4 rounded hover:bg-blue-700"
+                    >
+                        Next
+                    </Link>
+                </div>
+            )}
+
+            
         </div>
     )
 };
