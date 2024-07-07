@@ -121,7 +121,7 @@ const MapComponent = () => {
                         href={`/list/markarea?lat=${lat}&lng=${lng}`}
                         className="bg-blue-900 text-white text-center font-semibold mt-10 py-2 px-4 rounded hover:bg-blue-700"
                     >
-                        Next
+                        Proceed
                     </Link>
                 </div>
             )}
