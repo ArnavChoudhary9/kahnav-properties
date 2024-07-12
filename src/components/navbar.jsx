@@ -14,7 +14,7 @@ const Navbar = () => {
     <nav className="bg-dark-500 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-lg font-bold">
-          <Link href="/" className="hover:text-gray-400">Kahnav Properties</Link>
+          <Link href="/" className="hover:text-gray-400">Kahnv Properties</Link>
         </div>
         <div className="hidden md:flex space-x-8"> {/* Hidden on mobile */}
           <Link href="/" className="hover:text-gray-400">Home</Link>

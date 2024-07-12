@@ -4,7 +4,7 @@ export default function Home() {
       <div className="relative z-10 flex items-center justify-center w-full h-32 lg:h-72">
         <div className="absolute inset-0 z-[-10] rounded-full bg-gradient-radial from-blue-900 to-transparent blur-3xl"></div>
         <h1 className="text-4xl font-bold text-center sm:text-5xl md:text-6xl">
-          Kahnav Properties
+          Kahnv Properties
         </h1>
       </div>
 
@@ -35,7 +35,7 @@ export default function Home() {
             </span>
           </h2>
           <p className="text-sm opacity-50">
-            Get the best value for your properties. List them on Kahnav Properties to bypass middlemen and get maximum profits.
+            Get the best value for your properties. List them on Kahnv Properties to bypass middlemen and get maximum profits.
           </p>
         </a>
       </div>

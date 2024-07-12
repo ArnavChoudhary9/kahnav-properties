@@ -124,9 +124,7 @@ const MapComponent = () => {
                         Proceed
                     </Link>
                 </div>
-            )}
-
-            
+            )}            
         </div>
     )
 };
