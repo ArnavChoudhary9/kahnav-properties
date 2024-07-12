@@ -1,5 +1,6 @@
 // src/app/api/images/route.ts
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -21,6 +22,7 @@ export const GET = async () => {
         }));
         console.log('Fetched images:', formattedRows);
         
+        revalidatePath('/test/images');
         const response = NextResponse.json(formattedRows, { status: 200 });
         response.headers.set('Cache-Control', 'no-store');
         return response;
