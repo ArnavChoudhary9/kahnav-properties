@@ -45,6 +45,7 @@ const ImageGallery = () => {
             <h2>Image Gallery</h2>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 {images.map((image) => {
+                    console.log(image);
                     return (
                         <div key={image.id} style={{ margin: '10px' }}>
                             <img src={`data:image/jpeg;base64,${image.image_data}`} alt={`Image ${image.id}`} style={{ maxWidth: '200px', maxHeight: '200px' }} />
