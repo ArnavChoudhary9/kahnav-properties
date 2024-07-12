@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useCallback, useState, useRef } from "react";
-import Link from "next/link";
+import Button from "@/components/Button";
 
 import { GoogleMap, PolygonF } from "@react-google-maps/api";
 
@@ -76,8 +76,9 @@ const Markarea = ({ searchParams } : {
     };
 
     const onUnmount = useCallback(() => {
+        localStorage.setItem('LandBoundry', JSON.stringify(paths));
         polygonRef.current = null;
-    }, []);
+    }, [paths]);
 
     return (
         <div>
@@ -107,12 +108,12 @@ const Markarea = ({ searchParams } : {
             </GoogleMap>
             
             <div className="flex flex-col p-6">
-                <Link 
-                    href={`/list/markarea?lat=${defaultMapCenter.lat}&lng=${defaultMapCenter.lng}`}
-                    className="bg-blue-900 text-white text-center font-semibold mt-2 py-2 px-4 rounded hover:bg-blue-700"
+                <Button
+                    href={`/list/verify`}
+                    className={"bg-blue-900 text-white mt-10 py-2 px-4 hover:bg-blue-700"}
                 >
-                    Proceed
-                </Link>
+                    Proceed To verification
+                </Button>
             </div>
         </div>
     )

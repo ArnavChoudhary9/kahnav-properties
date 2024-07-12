@@ -4,6 +4,7 @@ we need to make this component client rendered as well*/
 
 import { useState } from "react";
 import Link from "next/link";
+import Button from "./Button";
 
 // Map component Component from library
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
@@ -117,12 +118,12 @@ const MapComponent = () => {
                     <h1 className="text-2xl font-bold">Address:</h1>
                     <p className="text-base" id="address" />
 
-                    <Link 
+                    <Button
                         href={`/list/markarea?lat=${lat}&lng=${lng}`}
-                        className="bg-blue-900 text-white text-center font-semibold mt-10 py-2 px-4 rounded hover:bg-blue-700"
+                        className={"bg-blue-900 text-white mt-10 py-2 px-4 hover:bg-blue-700"}
                     >
-                        Proceed
-                    </Link>
+                        Outline your land
+                    </Button>
                 </div>
             )}            
         </div>
