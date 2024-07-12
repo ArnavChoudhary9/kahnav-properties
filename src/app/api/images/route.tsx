@@ -20,7 +20,6 @@ export const GET = async () => {
             ...row,
             image_data: row.image_data.toString() // Convert buffer to string
         }));
-        console.log('Fetched images:', formattedRows);
         
         revalidatePath('/test/images');
         const response = NextResponse.json(formattedRows, { status: 200 });

@@ -1,4 +1,3 @@
-// components/UploadForm.tsx
 'use client'
 
 import { useState } from 'react';
@@ -49,6 +48,7 @@ const UploadForm = () => {
         <div>
             <h1>Upload Image</h1>
             <input type="file" accept="image/*" onChange={handleImageChange} />
+            <br />
             <button onClick={handleUpload}>Upload</button>
             {status && <p>{status}</p>}
         </div>

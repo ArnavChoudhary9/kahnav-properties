@@ -1,15 +1,15 @@
-// src/app/components/ImageGallery.tsx
 'use client'
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
-interface Image {
+interface ImageDS {
     id: number;
     image_data: string;
 }
 
 const ImageGallery: React.FC = () => {
-    const [images, setImages] = useState<Image[]>([]);
+    const [images, setImages] = useState<ImageDS[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -21,7 +21,6 @@ const ImageGallery: React.FC = () => {
                     throw new Error(`Error fetching images: ${response.statusText}`);
                 }
                 const data = await response.json();
-                console.log('Fetched images data:', data);
                 setImages(data);
                 setLoading(false);
             } catch (error) {
@@ -47,7 +46,12 @@ const ImageGallery: React.FC = () => {
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 {images.map((image) => (
                     <div key={image.id} style={{ margin: '10px' }}>
-                        <img src={`data:image/jpeg;base64,${image.image_data}`} alt={`Image ${image.id}`} style={{ maxWidth: '200px', maxHeight: '200px' }} />
+                        <Image
+                            src={`data:image/jpeg;base64,${image.image_data}`}
+                            alt={`Image ${image.id}`}
+                            width={150}
+                            height={150}
+                        />
                     </div>
                 ))}
             </div>
