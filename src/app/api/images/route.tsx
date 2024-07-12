@@ -15,14 +15,20 @@ export const GET = async () => {
         const { rows } = await client.query('SELECT id, image_data FROM images');
         client.release();
 
-        // Ensure image_data is a string
         const formattedRows = rows.map((row) => ({
             ...row,
             image_data: row.image_data.toString() // Convert buffer to string
         }));
-        return NextResponse.json(formattedRows, { status: 200 });
+        console.log('Fetched images:', formattedRows);
+        
+        const response = NextResponse.json(formattedRows, { status: 200 });
+        response.headers.set('Cache-Control', 'no-store');
+        return response;
     } catch (error) {
         console.error('Error fetching images:', error);
-        return NextResponse.json({ error: 'Internal Server Error', message: (error as Error).message }, { status: 500 });
+        
+        const response = NextResponse.json({ error: 'Internal Server Error', message: (error as Error).message }, { status: 500 });
+        response.headers.set('Cache-Control', 'no-store');
+        return response;
     }
 };

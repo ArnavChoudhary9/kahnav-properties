@@ -1,4 +1,4 @@
-// components/ImageGallery.tsx
+// src/app/components/ImageGallery.tsx
 'use client'
 
 import { useEffect, useState } from 'react';
@@ -8,7 +8,7 @@ interface Image {
     image_data: string;
 }
 
-const ImageGallery = () => {
+const ImageGallery: React.FC = () => {
     const [images, setImages] = useState<Image[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -16,11 +16,12 @@ const ImageGallery = () => {
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                const response = await fetch('/api/images');
+                const response = await fetch('/api/images', { cache: 'no-store' });
                 if (!response.ok) {
                     throw new Error(`Error fetching images: ${response.statusText}`);
                 }
                 const data = await response.json();
+                console.log('Fetched images data:', data);
                 setImages(data);
                 setLoading(false);
             } catch (error) {
@@ -44,14 +45,11 @@ const ImageGallery = () => {
         <div>
             <h2>Image Gallery</h2>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                {images.map((image) => {
-                    console.log(image);
-                    return (
-                        <div key={image.id} style={{ margin: '10px' }}>
-                            <img src={`data:image/jpeg;base64,${image.image_data}`} alt={`Image ${image.id}`} style={{ maxWidth: '200px', maxHeight: '200px' }} />
-                        </div>
-                    );
-                })}
+                {images.map((image) => (
+                    <div key={image.id} style={{ margin: '10px' }}>
+                        <img src={`data:image/jpeg;base64,${image.image_data}`} alt={`Image ${image.id}`} style={{ maxWidth: '200px', maxHeight: '200px' }} />
+                    </div>
+                ))}
             </div>
         </div>
     );
