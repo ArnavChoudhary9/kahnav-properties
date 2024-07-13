@@ -4,16 +4,32 @@ import { useState, useEffect, ChangeEvent } from 'react';
 import Image from 'next/image';
 import Button from '@/components/Button';
 
+const MAX_FILE_SIZE = 200 * 1024; // 200KB
+
 const ImageUpload = () => {
     const [selectedImages, setSelectedImages] = useState<(File | null)[]>([null, null]);
     const [previews, setPreviews] = useState<(string | null)[]>([null, null]);
+    const [errors, setErrors] = useState<string[]>(['', '']);
     const [widthClass, setWidthClass] = useState<string>('');
 
     const handleImageChange = (index: number) => (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] || null;
+
+        if (file && file.size > MAX_FILE_SIZE) {
+            const newErrors = [...errors];
+            newErrors[index] = 'File size should not exceed 200KB';
+            setErrors(newErrors);
+            return;
+        }
+
         const newSelectedImages = [...selectedImages];
+        const newErrors = [...errors];
+
         newSelectedImages[index] = file;
+        newErrors[index] = '';
+
         setSelectedImages(newSelectedImages);
+        setErrors(newErrors);
     };
 
     const handleImageUpload = () => { };
@@ -61,19 +77,25 @@ const ImageUpload = () => {
                             style={{ display: 'none' }}
                             id={`image-upload-input-${index}`}
                         />
+
                         <label
                             htmlFor={`image-upload-input-${index}`}
                             className="text-center cursor-pointer p-2.5 border border-gray-300 inline-block"
                         >
                             Upload {index === 0 ? 'First' : 'Second'} Image
                         </label>
+
+                        {errors[index] && (
+                            <div className="text-red-500 text-sm mt-2">{errors[index]}</div>
+                        )}
+
                         {previews[index] && (
                             <Image
                                 src={previews[index]!}
                                 alt={`Image preview ${index + 1}`}
                                 className='my-2 self-center'
                                 width={200}
-                                height={200}
+                                height={400}
                             />
                         )}
                     </div>
