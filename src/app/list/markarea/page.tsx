@@ -32,12 +32,12 @@ interface LatLng {
     lng: number;
 };
 
-const Markarea = ({ searchParams } : {
+const Markarea = ({ searchParams }: {
     searchParams: { lat: string, lng: string }
 }) => {
     const centerLat = parseFloat(searchParams.lat);
     const centerLng = parseFloat(searchParams.lng);
-    
+
     const defaultMapCenter = {
         lat: centerLat,
         lng: centerLng
@@ -60,7 +60,7 @@ const Markarea = ({ searchParams } : {
     const [paths, setParts] = useState<LatLng[]>(initialPaths);
     const polygonRef = useRef<google.maps.Polygon | null>(null);
 
-    const onLoad = useCallback((polygon : google.maps.Polygon) => {
+    const onLoad = useCallback((polygon: google.maps.Polygon) => {
         polygonRef.current = polygon;
     }, []);
 
@@ -76,9 +76,8 @@ const Markarea = ({ searchParams } : {
     };
 
     const onUnmount = useCallback(() => {
-        localStorage.setItem('LandBoundry', JSON.stringify(paths));
         polygonRef.current = null;
-    }, [paths]);
+    }, []);
 
     return (
         <div>
@@ -106,11 +105,12 @@ const Markarea = ({ searchParams } : {
                     onUnmount={onUnmount}
                 />
             </GoogleMap>
-            
+
             <div className="flex flex-col p-6">
                 <Button
                     href={`/list/verify`}
                     className={"bg-blue-900 text-white mt-10 py-2 px-4 hover:bg-blue-700"}
+                    onClick={() => { localStorage.setItem('LandBoundry', JSON.stringify(paths)); } }
                 >
                     Proceed To verification
                 </Button>
