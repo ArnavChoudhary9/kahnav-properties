@@ -2,40 +2,131 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MdMenu, MdClose } from 'react-icons/md';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
+  const menuVariants = {
+    open: {
+      height: "auto",
+      transition: {
+        type: "spring",
+        damping: 20,
+        stiffness: 200,
+        // Isolate animation from scroll layout
+        onUpdate: () => window.dispatchEvent(new Event('resize'))
+      }
+    },
+    closed: {
+      height: 0,
+      transition: {
+        type: "spring",
+        damping: 30,
+        stiffness: 200,
+        // Prevent layout shift during animation
+        onUpdate: () => window.dispatchEvent(new Event('resize'))
+      }
+    }
+  };
+
+  const itemVariants = {
+    open: { 
+      opacity: 1,
+      x: 0 
+    },
+    closed: { 
+      opacity: 0,
+      x: -20 
+    }
+  };
+   
+  const iconVariants = {
+    open: {
+      rotate: 90,
+      scale: 1.1
+    },
+    closed: {
+      rotate: 0,
+      scale: 1
+    }
   };
 
   return (
-    <nav className="bg-dark-500 text-white p-4">
+    <nav className="bg-neutral-900 backdrop-blur-sm bg-opacity-0 text-white p-5 fixed top-0 w-full z-[1000] shadow-md">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="text-lg font-bold">
+
+        <div className="text-2xl font-bold mx-2">
           <Link href="/" className="hover:text-gray-400">Kahnv Properties</Link>
         </div>
-        <div className="hidden md:flex space-x-8"> {/* Hidden on mobile */}
-          <Link href="/" className="hover:text-gray-400">Home</Link>
+
+        <div className="hidden font-extralight md:flex space-x-8 mx-4"> {/* Hidden on mobile */}
           <Link href="/buy" className="hover:text-gray-400">Buy</Link>
           <Link href="/list" className="hover:text-gray-400">List</Link>
         </div>
+
         <div className="md:hidden">
-          <button onClick={toggleMenu} className="focus:outline-none">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"}></path>
-            </svg>
-          </button>
+          <motion.button
+            whileHover="hover"
+            variants={iconVariants}
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-2xl p-2 hover:text-gray-400"
+          >
+            <AnimatePresence mode='wait' initial={false}>
+              {isOpen ? (
+                <motion.div
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <MdClose />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <MdMenu />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.button>
         </div>
       </div>
-      {isOpen && (
-        <div className="md:hidden bg-dark-500">
-          <Link href="/" className="block px-4 py-2 hover:text-gray-400">Home</Link>
-          <Link href="/buy" className="block px-4 py-2 hover:text-gray-400">Buy</Link>
-          <Link href="/list" className="block px-4 py-2 hover:text-gray-400">List</Link>
-        </div>
-      )}
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={menuVariants}
+            className="md:hidden overflow-hidden"
+          >
+            <motion.div
+              className="px-4 pt-2 pb-4 space-y-2"
+              variants={{
+                open: { transition: { staggerChildren: 0.1 } },
+                closed: { transition: { staggerChildren: 0.05, staggerDirection: -1 } }
+              }}
+            >
+              <motion.div variants={itemVariants}>
+                <Link href="/buy" onClick={() => setIsOpen(!isOpen)} className="block font-extralight py-2 hover:text-gray-400">Home</Link>
+              </motion.div>
+              <motion.div variants={itemVariants}>
+                <Link href="/list" onClick={() => setIsOpen(!isOpen)} className="block font-extralight py-2 hover:text-gray-400">About</Link>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </nav>
   );
 };
