@@ -117,10 +117,10 @@ const Navbar = () => {
               }}
             >
               <motion.div variants={itemVariants}>
-                <Link href="/buy" onClick={() => setIsOpen(!isOpen)} className="block font-extralight py-2 hover:text-gray-400">Home</Link>
+                <Link href="/buy" onClick={() => setIsOpen(!isOpen)} className="block font-extralight py-2 hover:text-gray-400">Buy</Link>
               </motion.div>
               <motion.div variants={itemVariants}>
-                <Link href="/list" onClick={() => setIsOpen(!isOpen)} className="block font-extralight py-2 hover:text-gray-400">About</Link>
+                <Link href="/list" onClick={() => setIsOpen(!isOpen)} className="block font-extralight py-2 hover:text-gray-400">List</Link>
               </motion.div>
             </motion.div>
           </motion.div>
