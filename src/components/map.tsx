@@ -3,7 +3,6 @@ we need to make this component client rendered as well*/
 'use client'
 
 import { useState } from "react";
-import Link from "next/link";
 import Button from "./Button";
 
 // Map component Component from library
@@ -40,6 +39,7 @@ const defaultMapOptions = {
     tilt: 0,
     gestureHandling: 'auto',
     mapTypeId: 'satellite',
+    streetViewControl: false,
     restriction: {
         latLngBounds: sikarBounds,
         strictBounds: true,
