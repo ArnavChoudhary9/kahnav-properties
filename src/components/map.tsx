@@ -46,6 +46,13 @@ const defaultMapOptions = {
   }
 };
 
+setDefaults({
+  key: process.env.NEXT_PUBLIC_GOOGLE_MAP_API as string,
+  language: "en",
+  region: "in",
+  outputFormat: OutputFormat.JSON,
+});
+
 const UpdateAddress = (lat: number, lng: number): void => {
   fromLatLng(lat, lng)
     .then(({ results }) => {
@@ -62,24 +69,6 @@ let AddressSet: boolean = false;
 
 const MapComponent = () => {
   const [[lat, lng], setLatLng] = useState([defaultMapCenter.lat, defaultMapCenter.lng]);
-  const [apiKeySet, setApikeySet] = useState(false);
-
-  useEffect(() => {
-    fetch('/api/maps-api-key')
-      .then(res => res.json())
-      .then(data => {
-        if (data.apiKey) {
-          setDefaults({
-            key: data.apiKey,
-            language: "en",
-            region: "in",
-            outputFormat: OutputFormat.JSON,
-          });
-          setApikeySet(true);
-        } else console.error(data.error)
-      })
-      .catch(error => console.error('Error fetching API key:', error));
-  }, []);
 
   return (
     <div className="w-50">
@@ -87,13 +76,30 @@ const MapComponent = () => {
         <h1 className="px-6 py-2 text-2xl">Locate your land</h1>
       )}
 
-      {apiKeySet &&
-        <GoogleMap
-          mapContainerStyle={defaultMapContainerStyle}
-          center={defaultMapCenter}
-          zoom={defaultMapZoom}
-          options={defaultMapOptions}
-          onClick={(event: google.maps.MapMouseEvent) => {
+      <GoogleMap
+        mapContainerStyle={defaultMapContainerStyle}
+        center={defaultMapCenter}
+        zoom={defaultMapZoom}
+        options={defaultMapOptions}
+        onClick={(event: google.maps.MapMouseEvent) => {
+          if (event.latLng) {
+            const [newLat, newLng] = [event.latLng.lat(), event.latLng.lng()];
+            setLatLng([newLat, newLng]);
+            UpdateAddress(newLat, newLng);
+
+            AddressSet = true;
+          } else {
+            console.error("Event latLng is null");
+          }
+        }}
+      >
+        <MarkerF
+          position={{
+            lat: lat,
+            lng: lng
+          }}
+          draggable={true}
+          onDragEnd={(event: google.maps.MapMouseEvent) => {
             if (event.latLng) {
               const [newLat, newLng] = [event.latLng.lat(), event.latLng.lng()];
               setLatLng([newLat, newLng]);
@@ -104,27 +110,9 @@ const MapComponent = () => {
               console.error("Event latLng is null");
             }
           }}
-        >
-          <MarkerF
-            position={{
-              lat: lat,
-              lng: lng
-            }}
-            draggable={true}
-            onDragEnd={(event: google.maps.MapMouseEvent) => {
-              if (event.latLng) {
-                const [newLat, newLng] = [event.latLng.lat(), event.latLng.lng()];
-                setLatLng([newLat, newLng]);
-                UpdateAddress(newLat, newLng);
+        />
+      </GoogleMap>
 
-                AddressSet = true;
-              } else {
-                console.error("Event latLng is null");
-              }
-            }}
-          />
-        </GoogleMap>
-      }
 
       {AddressSet && (
         <div className="flex flex-col p-6">
